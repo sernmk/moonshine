@@ -6,6 +6,7 @@ namespace MoonShine\Handlers;
 
 use Closure;
 use Generator;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use MoonShine\Contracts\Resources\ResourceContract;
 use MoonShine\Exceptions\ActionException;
@@ -155,10 +156,15 @@ class ExportHandler extends Handler
     private function generateFilePath(): string
     {
         $dir = $this->getDir();
-        $filename = $this->hasFilename() ? $this->filename : $this->getResource()->uriKey();
+        $filename = $this->hasFilename() ? $this->filename : $this->getDefaultFilename();
         $ext = $this->isCsv() ? 'csv' : 'xlsx';
 
         return sprintf('%s/%s.%s', $dir, $filename, $ext);
+    }
+
+    private function getDefaultFilename(): string
+    {
+        return $this->getResource()->getUriKey() . '-' . Str::uuid();
     }
 
     /**

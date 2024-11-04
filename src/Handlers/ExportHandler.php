@@ -71,6 +71,11 @@ class ExportHandler extends Handler
         return $this;
     }
 
+    public function getFilename(): ?string
+    {
+        return $this->hasFilename() ? $this->filename : $this->getDefaultFilename();
+    }
+
     /**
      * @param array|Closure(static $ctx): array $ids
      */
@@ -156,7 +161,7 @@ class ExportHandler extends Handler
     private function generateFilePath(): string
     {
         $dir = $this->getDir();
-        $filename = $this->hasFilename() ? $this->filename : $this->getDefaultFilename();
+        $filename = $this->getFilename();
         $ext = $this->isCsv() ? 'csv' : 'xlsx';
 
         return sprintf('%s/%s.%s', $dir, $filename, $ext);
@@ -164,7 +169,7 @@ class ExportHandler extends Handler
 
     private function getDefaultFilename(): string
     {
-        return $this->getResource()->getUriKey() . '-' . Str::uuid();
+        return $this->getResource()->uriKey() . '-' . Str::uuid();
     }
 
     /**

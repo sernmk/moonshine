@@ -71,7 +71,7 @@ class ExportHandler extends Handler
         return $this;
     }
 
-    public function getFilename(): ?string
+    private function getFilename(): ?string
     {
         return $this->hasFilename() ? $this->filename : $this->getDefaultFilename();
     }

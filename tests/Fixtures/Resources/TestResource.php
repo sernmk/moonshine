@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MoonShine\Tests\Fixtures\Resources;
 
 use Closure;
-use MoonShine\Handlers\ExportHandler;
 use Illuminate\Database\Eloquent\Model;
+use MoonShine\Handlers\ExportHandler;
 use MoonShine\Resources\ModelResource;
 
 class TestResource extends ModelResource

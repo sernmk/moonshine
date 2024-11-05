@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MoonShine\Tests\Fixtures\Resources;
 
-use MoonShine\Handlers\ExportHandler;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\MorphTo;
+use MoonShine\Handlers\ExportHandler;
 use MoonShine\Resources\ModelResource;
 use MoonShine\Tests\Fixtures\Models\Category;
 use MoonShine\Tests\Fixtures\Models\ImageModel;

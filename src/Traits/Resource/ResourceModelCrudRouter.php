@@ -31,7 +31,6 @@ trait ResourceModelCrudRouter
 
     /**
      * @param string|null $name
-     * @param TModel|int|string|null $key
      *
      */
     public function route(
@@ -66,10 +65,7 @@ trait ResourceModelCrudRouter
         return $this->pageUrl($this->indexPage(), params: $params, fragment: $fragment);
     }
 
-    /**
-     * @param TModel|int|string|null $model
-     *
-     */
+    
     public function formPageUrl(
         Model|int|string|null $model = null,
         array $params = [],
@@ -85,10 +81,7 @@ trait ResourceModelCrudRouter
         );
     }
 
-    /**
-     * @param TModel|int|string $model
-     *
-     */
+    
     public function detailPageUrl(
         Model|int|string $model,
         array $params = [],
@@ -104,10 +97,7 @@ trait ResourceModelCrudRouter
         );
     }
 
-    /**
-     * @param TModel|int|string|null $model
-     *
-     */
+    
     public function fragmentLoadUrl(
         string $fragment,
         Page $page,

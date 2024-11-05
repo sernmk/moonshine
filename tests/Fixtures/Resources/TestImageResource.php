@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MoonShine\Tests\Fixtures\Resources;
 
+use MoonShine\Handlers\ExportHandler;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
@@ -32,5 +33,12 @@ class TestImageResource extends ModelResource
     public function rules(Model $item): array
     {
         return [];
+    }
+
+    public function export(): ?ExportHandler
+    {
+        return ExportHandler::make(__('moonshine::ui.export'))
+            ->csv()
+            ->filename($this->uriKey());
     }
 }

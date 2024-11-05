@@ -267,9 +267,7 @@ export default (asyncUrl = '') => ({
           ) {
             this.choicesInstance.removeActiveItems(id)
 
-            this.choicesInstance._triggerChange(
-              this.choicesInstance._store.placeholderChoice.value,
-            )
+            this.choicesInstance._triggerChange(this.choicesInstance._store.placeholderChoice.value)
 
             this.choicesInstance._selectPlaceholderChoice(
               this.choicesInstance._store.placeholderChoice,

@@ -405,7 +405,11 @@ trait ResourceModelQuery
             ->onlyFields()
             ->findByColumn($column);
 
-        $callback = $field?->sortableCallback();
+        if (is_null($field)) {
+            return $this;
+        }
+
+        $callback = $field->sortableCallback();
 
         if (is_string($callback)) {
             $column = value($callback);

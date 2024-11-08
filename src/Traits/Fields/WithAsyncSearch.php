@@ -218,4 +218,9 @@ trait WithAsyncSearch
             replaceQuery: $replaceQuery
         );
     }
+
+    public function asyncOnInit(): static
+    {
+        return $this->customAttributes(['data-async-on-init' => true]);
+    }
 }

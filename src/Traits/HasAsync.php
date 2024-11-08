@@ -99,4 +99,9 @@ trait HasAsync
     {
         return $this->asyncBeforeCallback;
     }
+
+    public function asyncOnInit(): static
+    {
+        return $this->customAttributes(['data-async-on-init' => true]);
+    }
 }

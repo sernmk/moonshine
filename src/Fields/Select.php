@@ -68,4 +68,9 @@ class Select extends Field implements
 
         return (string) data_get($this->flattenValues(), $value, '');
     }
+
+    public function asyncOnInit(): static
+    {
+        return $this->customAttributes(['data-async-on-init' => true]);
+    }
 }

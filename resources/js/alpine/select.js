@@ -289,11 +289,12 @@ export default (asyncUrl = '') => ({
     }
   },
 
-  async asyncSearch(onInit = false) {
+  async asyncSearch(quietly = false) {
     const query = this.searchTerms.value ?? null
+    let canRequest = this.$el.dataset.asyncOnInit || (query !== null && query.length)
     let options = []
 
-    if (query !== null && query.length) {
+    if (canRequest) {
       const url = asyncUrl.startsWith('/')
         ? new URL(asyncUrl, window.location.origin)
         : new URL(asyncUrl)
@@ -305,7 +306,7 @@ export default (asyncUrl = '') => ({
       options = await this.fromUrl(url.toString() + (formQuery.length ? '&' + formQuery : ''))
     }
     await this.choicesInstance.setChoices(options, 'value', 'label', true)
-    if (!onInit) {
+    if (!quietly) {
       this.$el.dispatchEvent(new Event('change'))
     }
   },

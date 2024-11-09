@@ -186,7 +186,7 @@ export default (asyncUrl = '') => ({
 
     this.$el.addEventListener('change', () => (this.isLoadedOptions = false), false)
 
-    if (this.associatedWith && asyncUrl) {
+    if (asyncUrl) {
       this.$el.addEventListener(
         'showDropdown',
         () => {
@@ -196,7 +196,9 @@ export default (asyncUrl = '') => ({
         },
         false,
       )
+    }
 
+    if (this.associatedWith && asyncUrl) {
       document.querySelector(`[name="${this.associatedWith}"]`).addEventListener(
         'change',
         event => {

@@ -184,6 +184,8 @@ export default (asyncUrl = '') => ({
       ...this.customOptions,
     })
 
+    this.$el.addEventListener('change', () => this.isLoadedOptions = false, false)
+
     if (this.associatedWith && asyncUrl) {
       this.$el.addEventListener('showDropdown', () => {
           if (!this.isLoadedOptions) {
@@ -307,7 +309,6 @@ export default (asyncUrl = '') => ({
     }
     await this.choicesInstance.setChoices(options, 'value', 'label', true)
     this.isLoadedOptions = true
-    this.$el.dispatchEvent(new Event('change'))
   },
   fromUrl(url) {
     return fetch(url)

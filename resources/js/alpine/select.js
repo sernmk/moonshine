@@ -13,6 +13,7 @@ export default (asyncUrl = '') => ({
   shouldSort: null,
   associatedWith: null,
   searchTerms: null,
+  isLoadedOptions: false,
   customOptions: {},
   resolvedOptions: [
     'silent',
@@ -179,26 +180,27 @@ export default (asyncUrl = '') => ({
       },
       callbackOnInit: () => {
         this.searchTerms = this.$el.closest('.choices').querySelector('[name="search_terms"]')
-
-        if (!this.$el?.disabled) {
-          this.$el.closest('.choices').addEventListener('focus', () => {
-            this.choicesInstance.showDropdown()
-          })
-        }
-
-        if (this.associatedWith && asyncUrl) {
-          this.$nextTick(() => this.asyncSearch(true))
-        }
       },
       ...this.customOptions,
     })
 
+    this.$el.addEventListener('change', () => this.isLoadedOptions = false, false)
+
     if (this.associatedWith && asyncUrl) {
+      this.$el.addEventListener('showDropdown', () => {
+          if (!this.isLoadedOptions) {
+            this.asyncSearch()
+          }
+        },
+        false
+      );
+
       document.querySelector(`[name="${this.associatedWith}"]`).addEventListener(
         'change',
         event => {
           this.choicesInstance.clearStore()
-          this.asyncSearch()
+          this.$el.dispatchEvent(new Event('change'))
+          this.isLoadedOptions = false
         },
         false,
       )
@@ -289,7 +291,7 @@ export default (asyncUrl = '') => ({
     }
   },
 
-  async asyncSearch(quietly = false) {
+  async asyncSearch() {
     const query = this.searchTerms.value ?? null
     let canRequest = this.$el.dataset.asyncOnInit || (query !== null && query.length)
     let options = []
@@ -306,9 +308,7 @@ export default (asyncUrl = '') => ({
       options = await this.fromUrl(url.toString() + (formQuery.length ? '&' + formQuery : ''))
     }
     await this.choicesInstance.setChoices(options, 'value', 'label', true)
-    if (!quietly) {
-      this.$el.dispatchEvent(new Event('change'))
-    }
+    this.isLoadedOptions = true
   },
   fromUrl(url) {
     return fetch(url)

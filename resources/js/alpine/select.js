@@ -184,16 +184,18 @@ export default (asyncUrl = '') => ({
       ...this.customOptions,
     })
 
-    this.$el.addEventListener('change', () => this.isLoadedOptions = false, false)
+    this.$el.addEventListener('change', () => (this.isLoadedOptions = false), false)
 
     if (this.associatedWith && asyncUrl) {
-      this.$el.addEventListener('showDropdown', () => {
+      this.$el.addEventListener(
+        'showDropdown',
+        () => {
           if (!this.isLoadedOptions) {
             this.asyncSearch()
           }
         },
-        false
-      );
+        false,
+      )
 
       document.querySelector(`[name="${this.associatedWith}"]`).addEventListener(
         'change',

@@ -34,20 +34,23 @@ final class FiltersForm
             }
         }
 
+        $sort = \is_string(request()->input('sort')) ? request()->input('sort') : null;
+        $queryTag = \is_string(request()->input('query-tag')) ? request()->input('query-tag') : null;
+
         return FormBuilder::make($action, 'GET')
             ->name('filters')
             ->fillCast($values, $resource->getModelCast())
             ->fields(
                 $filters
                     ->when(
-                        request()->input('sort'),
+                        $sort,
                         static fn ($fields): Fields => $fields
-                            ->prepend(Hidden::make(column: 'sort')->setValue(request()->input('sort')))
+                            ->prepend(Hidden::make(column: 'sort')->setValue($sort))
                     )
                     ->when(
-                        request()->input('query-tag'),
+                        $queryTag,
                         static fn ($fields): Fields => $fields
-                            ->prepend(Hidden::make(column: 'query-tag')->setValue(request()->input('query-tag')))
+                            ->prepend(Hidden::make(column: 'query-tag')->setValue($queryTag))
                     )
                     ->toArray()
             )

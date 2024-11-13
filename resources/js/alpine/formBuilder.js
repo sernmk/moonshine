@@ -213,9 +213,8 @@ export default (name = '', initData = {}, reactive = {}) => ({
   },
 
   dispatchEvents(componentEvent, exclude = null, extra = {}) {
-    extra['_form'] = exclude === '*' ? {} : formToJSON(
-      prepareFormData(new FormData(this.$el), exclude)
-    )
+    extra['_form'] =
+      exclude === '*' ? {} : formToJSON(prepareFormData(new FormData(this.$el), exclude))
 
     de(componentEvent, '', this, extra)
   },
@@ -286,7 +285,8 @@ export default (name = '', initData = {}, reactive = {}) => ({
 })
 
 function prepareFormData(formData, exclude = null) {
-  const maxLength = 50, filtered = new FormData()
+  const maxLength = 50,
+    filtered = new FormData()
   for (const [key, value] of formData) {
     if (value.length <= maxLength) {
       filtered.append(key, value)
@@ -305,7 +305,8 @@ function prepareFormData(formData, exclude = null) {
 }
 
 function prepareFormQueryString(formData, exclude = null) {
-  const maxLength = 50, filtered = new FormData()
+  const maxLength = 50,
+    filtered = new FormData()
 
   for (const [key, value] of formData) {
     if (value.length <= maxLength) {

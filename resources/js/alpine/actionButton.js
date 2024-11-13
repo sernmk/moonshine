@@ -29,7 +29,18 @@ export default () => ({
 
   dispatchEvents(componentEvent, exclude = null, extra = {}) {
     const url = new URL(this.$el.href)
-    extra['_query'] = Object.fromEntries(new URLSearchParams(url.search))
+
+    let params = new URLSearchParams(url.search)
+
+    if (exclude !== null) {
+      const excludes = exclude.split(',')
+
+      excludes.forEach(function (excludeName) {
+        params.delete(excludeName)
+      })
+    }
+
+    extra['_query'] = exclude === '*' ? {} : Object.fromEntries(params)
 
     de(componentEvent, '', this, extra)
   },

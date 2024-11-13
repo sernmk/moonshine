@@ -175,7 +175,7 @@ class ActionButton extends MoonShineComponent implements ActionButtonContract
             ...$exclude,
             '_component_name',
             '_token',
-            '_method'
+            '_method',
         ]);
 
         return $this->onClick(

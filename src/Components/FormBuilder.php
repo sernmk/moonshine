@@ -186,7 +186,7 @@ final class FormBuilder extends RowComponent
             ...$exclude,
             '_component_name',
             '_token',
-            '_method'
+            '_method',
         ]);
 
         return $this->customAttributes([

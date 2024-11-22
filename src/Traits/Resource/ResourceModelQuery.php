@@ -422,13 +422,13 @@ trait ResourceModelQuery
             ->findByColumn($column);
 
         if (is_null($field)) {
-            return $this;
+            $column = $this->sortColumn();
         }
 
-        $callback = $field->sortableCallback();
+        $callback = $field?->sortableCallback();
 
         if (is_string($callback)) {
-            $column = value($callback);
+            $column = $callback;
         }
 
         if (is_closure($callback)) {

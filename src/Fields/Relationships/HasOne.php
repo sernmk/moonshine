@@ -42,6 +42,8 @@ class HasOne extends ModelRelationField implements HasFields
 
     protected bool $isAsync = false;
 
+    protected ?Closure $redirectAfter = null;
+
     public function async(): static
     {
         $this->isAsync = true;
@@ -71,6 +73,28 @@ class HasOne extends ModelRelationField implements HasFields
             ->onlyFields(withWrappers: true)
             ->detailFields(withOutside: false);
     }
+
+    /**
+     * @param  Closure(int $parentId, self $field): string  $callback
+     */
+    public function redirectAfter(Closure $callback): self
+    {
+        $this->redirectAfter = $callback;
+
+        return $this;
+    }
+
+    public function getRedirectAfter(Model|int|null|string $parentId): string
+    {
+        if (! is_null($this->redirectAfter)) {
+            return value($this->redirectAfter, $parentId, $this);
+        }
+
+        return moonshineRequest()
+            ->getResource()
+            ?->formPageUrl($parentId) ?? '';
+    }
+
 
     /**
      * @throws Throwable
@@ -158,11 +182,7 @@ class HasOne extends ModelRelationField implements HasFields
             $item?->getKey()
         );
 
-        $redirectAfter = to_page(
-            page: $parentResource->formPage(),
-            resource: $parentResource,
-            params: ['resourceItem' => $parentItem->getKey()]
-        );
+        $redirectAfter = $this->getRedirectAfter($this->getRelatedModel()?->getKey());
 
         $isAsync = ! is_null($item) && ($this->isAsync() || $resource->isAsync());
 

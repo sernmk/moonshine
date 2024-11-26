@@ -49,7 +49,7 @@ trait WithAlpineJsAttributes
     public function xModel(?string $column = null): static
     {
         if ($this instanceof Field) {
-            return $this->x('model', $this->column());
+            return $this->x('model', $column ?? $this->column());
         }
 
         return $this->x('model', $column);

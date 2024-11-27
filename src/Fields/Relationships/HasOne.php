@@ -44,6 +44,8 @@ class HasOne extends ModelRelationField implements HasFields
 
     protected ?Closure $redirectAfter = null;
 
+    protected ?Closure $modifyForm = null;
+
     public function async(): static
     {
         $this->isAsync = true;
@@ -75,9 +77,9 @@ class HasOne extends ModelRelationField implements HasFields
     }
 
     /**
-     * @param  Closure(int $parentId, self $field): string  $callback
+     * @param  Closure(int $parentId, static $field): string  $callback
      */
-    public function redirectAfter(Closure $callback): self
+    public function redirectAfter(Closure $callback): static
     {
         $this->redirectAfter = $callback;
 
@@ -94,6 +96,17 @@ class HasOne extends ModelRelationField implements HasFields
             ->getResource()
             ?->formPageUrl($parentId) ?? '';
     }
+
+    /**
+     * @param  Closure(FormBuilder $builder): FormBuilder  $callback
+     */
+    public function modifyForm(Closure $callback): static
+    {
+        $this->modifyForm = $callback;
+
+        return $this;
+    }
+
 
 
     /**
@@ -182,7 +195,9 @@ class HasOne extends ModelRelationField implements HasFields
             $item?->getKey()
         );
 
-        $redirectAfter = $this->getRedirectAfter($this->getRelatedModel()?->getKey());
+        $redirectAfter = $this->getRedirectAfter(
+            $parentItem->getKey()
+        );
 
         $isAsync = ! is_null($item) && ($this->isAsync() || $resource->isAsync());
 
@@ -236,7 +251,11 @@ class HasOne extends ModelRelationField implements HasFields
                     && $field->toOne()
                     && $field->column() === $relation->getForeignKeyName()
             ))
-            ->submit(__('moonshine::ui.save'), ['class' => 'btn-primary btn-lg']);
+            ->submit(__('moonshine::ui.save'), ['class' => 'btn-primary btn-lg'])
+            ->when(
+                ! \is_null($this->modifyForm),
+                fn (FormBuilder $form) => value($this->modifyForm, $form)
+            );
     }
 
     /**

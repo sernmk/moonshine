@@ -8,13 +8,14 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\ComponentAttributeBag;
 use MoonShine\Components\FieldsGroup;
+use MoonShine\Contracts\Fields\FieldsWrapper;
 use MoonShine\Decorations\LineBreak;
 use Throwable;
 
 /**
  * @method static static make(Closure|string $label, ?Closure $fields = null)
  */
-class Td extends Template
+class Td extends Template implements FieldsWrapper
 {
     private ?Closure $conditionalFields = null;
 
@@ -105,12 +106,10 @@ class Td extends Template
             return parent::resolvePreview();
         }
 
-        $fields = $this->hasConditionalFields()
-            ? $this->getConditionalFields()
-            : $this->getFields();
+        $fields = $this->getFields();
 
         return FieldsGroup::make(
-            Fields::make($fields)
+            $fields
         )
             ->mapFields(fn (Field $field, int $index): Field => $field
                 ->resolveFill($this->toRawValue(withoutModify: true), $this->getData())
@@ -118,5 +117,12 @@ class Td extends Template
                 ->withoutWrapper($this->hasLabels())
                 ->forcePreview())
             ->render();
+    }
+
+    public function getFields(): Fields
+    {
+        return $this->hasConditionalFields()
+            ? Fields::make($this->getConditionalFields())
+            : Fields::make($this->getRawFields());
     }
 }

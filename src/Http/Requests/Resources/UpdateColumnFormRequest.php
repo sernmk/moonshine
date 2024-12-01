@@ -62,10 +62,7 @@ final class UpdateColumnFormRequest extends MoonShineFormRequest
         );
 
         return $fields
-            ->withoutWrappers()
-            ?->findByColumn(
-                request()->input('field')
-            );
+            ->withoutWrappers()->findByColumn(request()->input('field'));
     }
 
     /**

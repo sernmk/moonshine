@@ -61,6 +61,10 @@ class Td extends Template implements FieldsWrapper
 
     public function getConditionalFields(): array
     {
+        if(\is_null($this->getData())) {
+            return [];
+        }
+
         return value($this->conditionalFields, $this->getData(), $this);
     }
 

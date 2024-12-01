@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MoonShine\Http\Requests\Resources;
 
+use MoonShine\Contracts\Fields\FieldsWrapper;
 use MoonShine\Exceptions\ResourceException;
 use MoonShine\Fields\Field;
 use MoonShine\Http\Requests\MoonShineFormRequest;
@@ -41,9 +42,27 @@ final class UpdateColumnFormRequest extends MoonShineFormRequest
      */
     public function getField(): ?Field
     {
-        return $this->getResource()
-            ?->getIndexFields()
-            ?->withoutWrappers()
+        $resource = $this->getResource();
+
+        if (\is_null($resource)) {
+            return null;
+        }
+
+        $data = $resource->getItem();
+
+        if (\is_null($data)) {
+            return null;
+        }
+
+        $fields = $resource->getIndexFields();
+        $fields->each(
+            fn (Field $field): Field => $field instanceof FieldsWrapper
+                ? $field->resolveFill($data->toArray(), $data)
+                : $field
+        );
+
+        return $fields
+            ->withoutWrappers()
             ?->findByColumn(
                 request()->input('field')
             );

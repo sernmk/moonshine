@@ -7,6 +7,7 @@
     'values' => [],
     'header' => null,
     'actions' => null,
+    'alt' => null,
 ])
 <!-- Card -->
 <div {{ $attributes->class(['card', 'card-category']) }}>
@@ -29,7 +30,7 @@
             @if(is_array($thumbnail))
                 <x-moonshine::carousel :items="$thumbnail" :alt="$title"></x-moonshine::carousel>
             @else
-                <img src="{{ $thumbnail }}" alt="{{ $title }}" />
+                <img src="{{ $thumbnail }}" alt="{{ $alt ?? $title }}" />
             @endif
         </div>
     @endif
